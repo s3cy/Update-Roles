@@ -9,7 +9,7 @@
 import Cocoa
 
 class ViewController: NSViewController {
-    var folderName: String = ""
+    var didChoose: Bool = false
     var avatarArr = [String]()
     struct Role {
         var name: String
@@ -21,22 +21,32 @@ class ViewController: NSViewController {
     }
     var roles = [Role]()
     
-    func writeJSONString() {
-        var s = ",{\"name\":\"\(folderName)\",\"roles\":["
+    func writeFile() {
+        var s = ",{\"name\":\"\(rolesTitleLabel.stringValue)\",\"roles\":["
         for role in roles {
             s += "{\"name\":\"\(role.name)\",\"imgURL\":\"\(role.imgURL)\"},"
         }
         s.substringToIndex(s.endIndex.predecessor())
         s += "]}]"
-        var path = "/Users/apple/Development/GitHub/Chat-App/data.json"
-        var fileHandle = NSFileHandle(forUpdatingAtPath: path)!
-        var size = fileHandle.seekToEndOfFile()
-        fileHandle.seekToFileOffset(size - sizeof(UInt64)/4)
-        let data = (s as NSString).dataUsingEncoding(NSUTF8StringEncoding)
-        fileHandle.writeData(data!)
+        var path = pathLabel.stringValue
+        if let fileHandle = NSFileHandle(forUpdatingAtPath: path) {
+            let size = fileHandle.seekToEndOfFile()
+            fileHandle.seekToFileOffset(size - sizeof(UInt64)/4)
+            let data = (s as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+            fileHandle.writeData(data!)
+            didChoose = false
+            rolesLabel.stringValue = ""
+            rolesTitleLabel.stringValue = ""
+            warningLabel.stringValue = "Added Successfully!"
+        } else {
+            warningLabel.stringValue = "⚠️ Warning: This is not a qualified path."
+        }
     }
     
     @IBAction func button(sender: NSButton) {
+        avatarArr.removeAll()
+        roles.removeAll()
+        
         var panel = NSOpenPanel()
         panel.canChooseFiles = false
         panel.canChooseDirectories = true
@@ -46,26 +56,54 @@ class ViewController: NSViewController {
         if (clicked == NSFileHandlingPanelOKButton) {
             let fileManager = NSFileManager()
             print(panel.URL!)
-            folderName = panel.URL!.lastPathComponent!
+            let folderName = panel.URL!.lastPathComponent!
+            var rolesTitle = folderName.stringByReplacingOccurrencesOfString("-", withString: " ")
+            if let range = rolesTitle.rangeOfString("Avatar") {
+                rolesTitle = rolesTitle.substringToIndex(range.startIndex)
+            }
+            rolesTitleLabel.stringValue = rolesTitle
+            
             let urlPath = panel.URL!.path!  //convert url to string
             var urlArr = fileManager.contentsOfDirectoryAtPath(urlPath, error: nil)!
             for url in urlArr {
                 avatarArr.append(url.lastPathComponent!)
             }
+            rolesLabel.stringValue = ""
+            rolesLabel.stringValue = "The following Roles are going to be added:\n\n"
             for (var i = 0; i < avatarArr.count; i++) {
-                let name = avatarArr[i].stringByReplacingOccurrencesOfString(" ", withString: "%20")
-                let ghUrlPath = "https://raw.githubusercontent.com/s3cy/Pictures/master/\(folderName)/\(name)"
+                let name = avatarArr[i].stringByDeletingPathExtension
+                let avatar = avatarArr[i].stringByReplacingOccurrencesOfString(" ", withString: "%20")
+                let ghUrlPath = "https://raw.githubusercontent.com/s3cy/Pictures/master/\(folderName)/\(avatar)"
                 var role = Role(name: name, imgURL: ghUrlPath)
+                rolesLabel.stringValue += "\"\(name)\" "
+                if i%4 == 0 && i != 0 {
+                    rolesLabel.stringValue += "\n"
+                }
                 roles.append(role)
             }
-            writeJSONString()
+            didChoose = true
         }
     }
     
+    @IBOutlet weak var rolesTitleLabel: NSTextField!
+    
+    @IBOutlet weak var rolesLabel: NSTextField!
+    
+    @IBOutlet weak var pathLabel: NSTextField!
+    
+    @IBOutlet weak var warningLabel: NSTextField!
+    
+    @IBAction func updateButton(sender: NSButton) {
+        if didChoose {
+            writeFile()
+        } else {
+            warningLabel.stringValue = "⚠️ Warning: Please select a folder first."
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
     }
 

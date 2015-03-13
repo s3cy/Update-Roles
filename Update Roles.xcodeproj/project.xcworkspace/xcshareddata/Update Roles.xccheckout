@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>F8C99020-21A6-4214-8BB1-1F4171E48C2D</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Update Roles</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>4F46A279A701EF3D29B8561D18D48D98974B2730</key>
+		<string>https://github.com/s3cy/Update-Roles.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Update Roles.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>4F46A279A701EF3D29B8561D18D48D98974B2730</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/s3cy/Update-Roles.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>4F46A279A701EF3D29B8561D18D48D98974B2730</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4F46A279A701EF3D29B8561D18D48D98974B2730</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Update%20Roles</string>
+		</dict>
+	</array>
+</dict>
+</plist>
